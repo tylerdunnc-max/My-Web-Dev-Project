@@ -81,3 +81,41 @@
             <span id="totalCash" class="highlight"></span>
         </div>
         <div class="
+<script>
+    function runCalculator() {
+        // Get inputs
+        const price = parseFloat(document.getElementById('price').value);
+        const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
+        const extra = parseFloat(document.getElementById('extraCosts').value);
+        const rent = parseFloat(document.getElementById('rentIncome').value) || 0;
+
+        // Math for Down Payment (3.5% FHA + 3% Closing)
+        const downPayment = price * 0.065;
+        document.getElementById('totalCash').innerText = "$" + downPayment.toLocaleString();
+
+        // Math for Mortgage (30 year)
+        const principal = price - (price * 0.035);
+        const payments = 360;
+        const x = Math.pow(1 + rate, payments);
+        const monthlyMortgage = (principal * x * rate) / (x - 1);
+
+        // Final Result
+        const totalOut = (monthlyMortgage + extra) - rent;
+        const resultElement = document.getElementById('finalResult');
+        
+        resultElement.innerText = "$" + Math.round(totalOut).toLocaleString();
+        
+        // Color coding
+        if (totalOut < 1000) {
+            resultElement.style.color = "#4CAF50"; // Green for good deal
+        } else {
+            resultElement.style.color = "#f44336"; // Red for expensive
+        }
+    }
+
+    function setRent(val) {
+        document.getElementById('rentIncome').value = val;
+    }
+    </script>
+</body>
+</html>
